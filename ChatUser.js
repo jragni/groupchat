@@ -7,6 +7,8 @@ const Room = require("./Room");
 
 /** ChatUser is a individual connection from client -> server to chat. */
 
+const jokes = [1, 2, 3, 4, 5];
+
 class ChatUser {
   /** Make chat user: store connection-device, room.
    *
@@ -28,9 +30,11 @@ class ChatUser {
    * */
 
   send(data) {
+    console.log("DATA", data);
     try {
       this._send(data);
     } catch {
+      console.log("ERRORRRRR");
       // If trying to send to a user fails, ignore it
     }
   }
@@ -62,6 +66,19 @@ class ChatUser {
     });
   }
 
+  /**TODO */
+
+  handleJoke(text) {
+    this.send(JSON.stringify({
+        name: this.name,
+        type: "joke",
+        text: jokes[Math.floor(Math.random() * 5)]
+      }));
+  }
+
+  // msg {}
+  // msg{msg{}}
+
   /** Handle messages from client:
    *
    * @param jsonData {string} raw message data
@@ -74,8 +91,9 @@ class ChatUser {
 
   handleMessage(jsonData) {
     let msg = JSON.parse(jsonData);
-
+    console.log("MSGGGG", msg);
     if (msg.type === "join") this.handleJoin(msg.name);
+    else if (msg.text === "/joke") this.handleJoke(msg.text);
     else if (msg.type === "chat") this.handleChat(msg.text);
     else throw new Error(`bad message: ${msg.type}`);
   }

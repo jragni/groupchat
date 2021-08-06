@@ -67,6 +67,11 @@ class Room {
       member.send(JSON.stringify(data));
     }
   }
+
+  /**TODO */
+  // broadcastSelf(member, data) {
+  //   member.send(JSON.stringify(data));
+  // }
 }
 
 module.exports = Room;
